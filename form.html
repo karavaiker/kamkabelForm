@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Online заказ | КамКабель</title>
+
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+		<script src="main.js"></script>
+	</head>
+	<body class="grey lighten-3">
+		<nav>
+			<div class="nav-wrapper  grey lighten-2">
+				<a href="/" class="brand-logo" >
+					<img src="http://kamkabel.ru/images/kamkabel/img/logo.png" width="209" height="60">
+				</a>
+				<ul id="nav-mobile" class="right hide-on-med-and-down ">
+					<li><a href="http://kamkabel.ru/" class="red-text text-darken-3">Вернуться на сайт</a></li>
+				</ul>
+			</div>
+		</nav>
+		<div class="row">
+			<div class="col s3">
+				<!--  navigation panel -->
+			</div>
+			<div class="col s6">
+				<div class="row">
+					<form class="col s12" id="send-form">
+						<h1 class="red-text text-darken-3">On-line заказ</h1>
+						<div class="row">
+							<div class="input-field col s6">
+								<input id="mark_name" type="text" class="validate">
+								<label for="mark_name">Марка</label>
+							</div>
+							<div class="input-field col s6">
+								<input id="count" type="text" class="validate">
+								<label for="count">Количество</label>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="input-field col s12">
+								<input id="name" type="text" class="validate">
+								<label for="name">Ф.И.О</label>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="input-field col s12">
+								<input id="phone" type="tel" class="validate">
+								<label for="phone">Телефон</label>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="input-field col s12">
+								<input id="email" type="email" class="validate">
+								<label for="email" data-error="Укажите правильный email">Email</label>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="input-field col s12">
+								<textarea id="addText" class="materialize-textarea"></textarea>
+								<label for="addText">Примечание</label>
+							</div>
+						</div>
+
+						<div class="row">
+							<blockquote>
+								Прикрепить файл с перечнем (если имеется)
+							</blockquote>
+						</div>
+
+						<div class="file-field input-field">
+							<div class="btn red darken-3">
+								<span>Файл</span>
+								<input type="file">
+							</div>
+							<div class="file-path-wrapper">
+								<input class="file-path" type="text">
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col offset-s9 s3">
+								<input class="btn waves-effect waves-light red darken-3" type="submit"  value="Заказать">
+							</div>
+						</div>
+					</form>
+
+					<div class="progress red darken-3 hide">
+						<div class="indeterminate red lighten-4"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+</html>
