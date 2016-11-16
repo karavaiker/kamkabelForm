@@ -1,86 +1,72 @@
 <?php
-error_reporting(ALL);
+
+//Простая проверка на робота
+if ($_POST['data-hash'] == md5('date'+date('H')) || $_POST['data-hash'] == md5( 'date'+(date('H')+1) ) ) {
 
 
- 
+    $to = "kv@properm.ru";
+    $user_email = "info@promedia-perm.ru";
+    $subject = "Онлайн закз на сайте";
+    $message = "
+  <p>Имя: " . $_POST['name'] . "</p>
+  <p>Телефон: " . $_POST['phone'] . "</p>
+  <p>E-mail: " . $_POST['email'] . "</p>
+  <p>---------------</p>
+  <p>Марка: " . $_POST['mark_name'] . "</p>
+  <p>Количество:" . $_POST['count'] . "</p>
+  <p>Примечание:" . $_POST['addText']."</p>";
 
-
-$to = "S.Belov@properm.ru";
-$user_email = "bsemyon@b-semyon.esy.es";
-$subject = "тема письма"; 
-$message = "
-  Имя: ".$_POST['name']."\r\n
-  Телефон: ".$_POST['phone']."\r\n
-  e-mail: ".$_POST['email']."\r\n
-  Марка: ".$_POST['mark_name']."\r\n
-  Количество:".$_POST['count']."\r\n
-  Примечание:".$_POST['addText']; 
-// текст сообщения, здесь вы можете вставлять таблицы, рисунки, заголовки, оформление цветом и т.п.
-
-$filename = $_FILES[file][name];
 // название файла
-$filepath = $_FILES[file][tmp_name];
+    $filename = $_FILES[file][name];
+
 // месторасположение файла
-//исьмо с вложением состоит из нескольких частей, которые разделяются разделителем
+    $filepath = $_FILES[file][tmp_name];
 
-$boundary = "--".md5(uniqid(time())); 
-// генерируем разделитель
 
-$mailheaders = "MIME-Version: 1.0;\r\n"; 
-$mailheaders .="Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n"; 
-// разделитель указывается в заголовке в параметре boundary 
+    $boundary = "--" . md5(uniqid(time()));
 
-$mailheaders .= "From: $user_email <$user_email>\r\n"; 
-$mailheaders .= "Reply-To: $user_email\r\n"; 
+    $mailheaders = "MIME-Version: 1.0;\r\n";
+    $mailheaders .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
+    $mailheaders .= "From: $user_email <$user_email>\r\n";
+    $mailheaders .= "Reply-To: $user_email\r\n";
+    $multipart = "--$boundary\r\n";
+    $multipart .= "Content-Type: text/html; charset=windows-1251\r\n";
+    $multipart .= "Content-Transfer-Encoding: base64\r\n";
+    $multipart .= "\r\n";
+    $multipart .= chunk_split(base64_encode(iconv("utf8", "windows-1251", $message)));
 
-$multipart = "--$boundary\r\n"; 
-$multipart .= "Content-Type: text/html; charset=windows-1251\r\n";
-$multipart .= "Content-Transfer-Encoding: base64\r\n";    
-$multipart .= "\r\n";
-$multipart .= chunk_split(base64_encode(iconv("utf8", "windows-1251", $message)));
-// первая часть само сообщение
- 
 // Закачиваем файл 
-	$fp = fopen($filepath,"r"); 
-		if (!$fp) 
-		{ 
-			print "Не удается открыть файл22"; 
-			exit(); 
-		} 
-$file = fread($fp, filesize($filepath)); 
-fclose($fp); 
-// чтение файла
+    $fp = fopen($filepath, "r");
+    if ($fp) {
+        $file = fread($fp, filesize($filepath));
+        fclose($fp);
+        $message_part = "\r\n--$boundary\r\n";
+        $message_part .= "Content-Type: application/octet-stream; name=\"$filename\"\r\n";
+        $message_part .= "Content-Transfer-Encoding: base64\r\n";
+        $message_part .= "Content-Disposition: attachment; filename=\"$filename\"\r\n";
+        $message_part .= "\r\n";
+        $message_part .= chunk_split(base64_encode($file));
+        $message_part .= "\r\n--$boundary--\r\n";
+        // второй частью прикрепляем файл, можно прикрепить два и более файла
 
+        $multipart .= $message_part;
 
-$message_part = "\r\n--$boundary\r\n"; 
-$message_part .= "Content-Type: application/octet-stream; name=\"$filename\"\r\n";  
-$message_part .= "Content-Transfer-Encoding: base64\r\n"; 
-$message_part .= "Content-Disposition: attachment; filename=\"$filename\"\r\n"; 
-$message_part .= "\r\n";
-$message_part .= chunk_split(base64_encode($file));
-$message_part .= "\r\n--$boundary--\r\n";
-// второй частью прикрепляем файл, можно прикрепить два и более файла
+    }
 
-$multipart .= $message_part;
+// отправляем письмо
+    if (mail($to, $subject, $multipart, $mailheaders)) {
+        echo '<div class="sent_ok"><h4>Сообщение успешно отправлено!</h4></div>';
+    } else {
+        echo '<div class="error"><h5 class="red-text text-darken-3">Произошла ошибка</h5></div>';
+    }
 
-if(mail($to,$subject,$multipart,$mailheaders)) {
-	echo $message;
-} else {
-	echo 'no';
-}
-// отправляем письмо 
 
 //удаляем файлы через 60 сек.
-if (time_nanosleep(5, 0)) {
-		unlink($filepath);
-}
+    if (time_nanosleep(5, 0)) {
+        unlink($filepath);
+    }
 // удаление файла
 
-
-echo '<pre>';
-print_r($_POST);
-print_r($_FILES);
-echo '</pre>';
-
-
-?>
+}else{
+    echo '<div class="error" data-error="data-hash">Произошла ошибка. Попробуйте отправить форму еще раз.</div>';
+}

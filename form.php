@@ -69,7 +69,7 @@
 						</div>
 
 						<div class="row">
-							<blockquote>
+							<blockquote class="grey-text text-darken-1">
 								Прикрепить файл с перечнем (если имеется)
 							</blockquote>
 						</div>
@@ -86,13 +86,24 @@
 
 						<div class="row">
 							<div class="col offset-s9 s3">
+								<input type="text" name="data-hash" value="<?php echo md5('date'+date('H'));?>" style="display: none;">
 								<input class="btn waves-effect waves-light red darken-3" type="submit"  value="Заказать">
 							</div>
 						</div>
 					</form>
 
-					<div class="progress red darken-3 hide">
+					<div class="progress red darken-3" style="display: none;">
 						<div class="indeterminate red lighten-4"></div>
+					</div>
+
+					<!-- Modal -->
+					<div id="response" class="modal">
+						<div class="modal-content">
+
+						</div>
+						<div class="modal-footer">
+							<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Ок</a>
+						</div>
 					</div>
 				</div>
 			</div>

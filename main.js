@@ -1,5 +1,8 @@
 $(document).ready(function () {
 
+    $('#response').modal();
+
+
     $('input[type="submit"]').click(function (e) {
         e.preventDefault();
         var form = $('#send-form')[0];
@@ -12,11 +15,12 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             beforeSend: function () {
-                $('.process').fadeIn();
+                $('.progress').fadeIn();
             },
             complete: function (xhr) {
-                $('.process').fadeOut();
-                $('body').append(xhr.responseText)
+                $('.progress').fadeOut();
+                $('#response .modal-content').html(xhr.responseText);
+                $('#response').modal('open');
             }
         });
     });
