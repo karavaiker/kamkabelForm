@@ -110,5 +110,5 @@
 		</div>
 		
 	</body>
-
+	<script src="http://cdn.callibri.ru/callibri.js" type="text/javascript"></script>
 </html>

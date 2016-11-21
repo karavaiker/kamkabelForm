@@ -1,10 +1,7 @@
 $(document).ready(function () {
-
     $('#response').modal();
-
-
     $('input[type="submit"]').click(function (e) {
-        e.preventDefault();
+        //e.preventDefault();
         var form = $('#send-form')[0];
         
         var formData = new FormData(form);
@@ -17,12 +14,17 @@ $(document).ready(function () {
             beforeSend: function () {
                 $('.progress').fadeIn();
             },
+            error: function(xhr){
+                $('.progress').fadeOut();
+                Materialize.toast('Произошла ошибка. Попробуйте отправить форму еще раз', 4000);
+            },
             complete: function (xhr) {
                 $('.progress').fadeOut();
-                $('#response .modal-content').html(xhr.responseText);
-                $('#response').modal('open');
+                if (xhr.status == 200){
+                    $('#response .modal-content').html(xhr.responseText);
+                    $('#response').modal('open');
+                }
             }
         });
     });
-
 });

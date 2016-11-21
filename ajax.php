@@ -4,9 +4,9 @@
 if ($_POST['data-hash'] == md5('date'+date('H')) || $_POST['data-hash'] == md5( 'date'+(date('H')+1) ) ) {
 
 
-    $to = "kv@properm.ru";
-    $user_email = "info@promedia-perm.ru";
-    $subject = "Онлайн закз на сайте";
+    $to = "zakaz1@kamkabel.ru";
+    $user_email = "info@kamkabel.ru";
+    $subject = "Онлайн закз на сайте kamkabel.ru";
     $message = "
   <p>Имя: " . $_POST['name'] . "</p>
   <p>Телефон: " . $_POST['phone'] . "</p>
@@ -57,7 +57,8 @@ if ($_POST['data-hash'] == md5('date'+date('H')) || $_POST['data-hash'] == md5( 
     if (mail($to, $subject, $multipart, $mailheaders)) {
         echo '<div class="sent_ok"><h4>Сообщение успешно отправлено!</h4></div>';
     } else {
-        echo '<div class="error"><h5 class="red-text text-darken-3">Произошла ошибка</h5></div>';
+        http_response_code(412);
+        die();
     }
 
 
@@ -68,5 +69,6 @@ if ($_POST['data-hash'] == md5('date'+date('H')) || $_POST['data-hash'] == md5( 
 // удаление файла
 
 }else{
-    echo '<div class="error" data-error="data-hash">Произошла ошибка. Попробуйте отправить форму еще раз.</div>';
+    http_response_code(408);
+    die();
 }
