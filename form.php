@@ -28,7 +28,7 @@
 	</div>
 	<div class="col s6">
 		<div class="row">
-			<form class="col s12" action="form.php" id="send-form" class="validate">
+			<form class="col s12" action="form.php" id="send-form">
 				<h1 class="red-text text-darken-3">On-line заказ</h1>
 				<div class="row">
 					<div class="input-field col s6">
@@ -43,7 +43,7 @@
 
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="name" type="text" name="name" class="validate" required>
+						<input id="name" type="text" name="name" class="validate required" required>
 						<label for="name" data-error="Это поле обязательно для заполнения" >Ф.И.О *</label>
 					</div>
 				</div>

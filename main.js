@@ -1,9 +1,14 @@
 $(document).ready(function () {
     $('#response').modal();
+    $('#phone').change(function () {
+        if ($(this).val().length < 9){
+            $('label[for="phone"]').attr('data-error','Введите номер в формате  +7 999 99 99 999')
+        }
+
+    });
     $('input[type="submit"]').click(function (e) {
         e.preventDefault();
         var form = $('#send-form')[0];
-
         var formData = new FormData(form);
         if ($('#send-form')[0].checkValidity()) {
             $.ajax({
@@ -28,6 +33,11 @@ $(document).ready(function () {
                 }
             });
         }else{
+            $('#send-form input').each(function () {
+                if ($(this).hasClass('validate') && !this.checkValidity()){
+                    $(this).addClass('invalid');
+                }
+            });
             Materialize.toast('Заполните обязательные поля', 4000);
         }
     });
