@@ -2,8 +2,6 @@
 
 //Простая проверка на робота
 if ($_POST['data-hash'] == md5('date'+date('H')) || $_POST['data-hash'] == md5( 'date'+(date('H')+1) ) ) {
-
-
     $to = "zakaz1@kamkabel.ru";
     $user_email = "info@kamkabel.ru";
     $subject = "Онлайн закз на сайте kamkabel.ru";
@@ -35,7 +33,7 @@ if ($_POST['data-hash'] == md5('date'+date('H')) || $_POST['data-hash'] == md5( 
     $multipart .= "\r\n";
     $multipart .= chunk_split(base64_encode(iconv("utf8", "windows-1251", $message)));
 
-// Закачиваем файл 
+// Закачиваем файл
     $fp = fopen($filepath, "r");
     if ($fp) {
         $file = fread($fp, filesize($filepath));
