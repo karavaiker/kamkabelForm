@@ -71,17 +71,18 @@
 
 				<div class="row">
 					<blockquote class="grey-text text-darken-1">
-						Прикрепить файл с перечнем (если имеется)
+						Прикрепить файл с перечнем (если имеется).<br>
+						Вы можете прикрепить несколько файлов.
 					</blockquote>
 				</div>
 
 				<div class="file-field input-field">
 					<div class="btn red darken-3">
 						<span>Файл</span>
-						<input type="file" name="file">
+						<input type="file" name="file[]" multiple maxlength="2">
 					</div>
 					<div class="file-path-wrapper">
-						<input class="file-path" type="text">
+						<input class="file-path" type="text" multiple maxlength="2">
 					</div>
 				</div>
 
@@ -113,3 +114,4 @@
 </body>
 <script src="https://cdn.callibri.ru/callibri.js" type="text/javascript"></script>
 </html>
+

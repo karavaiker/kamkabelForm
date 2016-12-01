@@ -41,4 +41,6 @@ $(document).ready(function () {
             Materialize.toast('Заполните обязательные поля', 4000);
         }
     });
+    
 });
+

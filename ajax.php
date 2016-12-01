@@ -1,4 +1,17 @@
 <?php
+// Меняем структуру массива (например, $_FILES)
+function reArrayFiles(&$file_post) {
+    $file_ary = array();
+    $file_count = count($file_post['name']);
+    $file_keys = array_keys($file_post);
+    for ($i=0; $i<$file_count; $i++) {
+        foreach ($file_keys as $key) {
+            $file_ary[$i][$key] = $file_post[$key][$i];
+        }
+    }
+    return $file_ary;
+}
+
 
 //Простая проверка на робота
 if ($_POST['data-hash'] == md5('date'+date('H')) || $_POST['data-hash'] == md5( 'date'+(date('H')+1) ) ) {
@@ -14,13 +27,6 @@ if ($_POST['data-hash'] == md5('date'+date('H')) || $_POST['data-hash'] == md5( 
   <p>Количество:" . $_POST['count'] . "</p>
   <p>Примечание:" . $_POST['addText']."</p>";
 
-// название файла
-    $filename = $_FILES[file][name];
-
-// месторасположение файла
-    $filepath = $_FILES[file][tmp_name];
-
-
     $boundary = "--" . md5(uniqid(time()));
 
     $mailheaders = "MIME-Version: 1.0;\r\n";
@@ -33,38 +39,53 @@ if ($_POST['data-hash'] == md5('date'+date('H')) || $_POST['data-hash'] == md5( 
     $multipart .= "\r\n";
     $multipart .= chunk_split(base64_encode(iconv("utf8", "windows-1251", $message)));
 
+    $multipart .= "\r\n--$boundary\r\n";
+
+
+// Преобразуем массив с загруженными файлами в удобный вид
+$file_ary = reArrayFiles($_FILES['file']);
+
+
+//Прикрепляем файлы
+foreach ($file_ary as $file => $value) {
+
+// название файла
+    $filename = $value[name];
+
+// месторасположение файла
+    $filepath = $value[tmp_name];
+
 // Закачиваем файл
     $fp = fopen($filepath, "r");
     if ($fp) {
         $file = fread($fp, filesize($filepath));
         fclose($fp);
-        $message_part = "\r\n--$boundary\r\n";
-        $message_part .= "Content-Type: application/octet-stream; name=\"$filename\"\r\n";
+        
+        $message_part = "Content-Type: application/octet-stream; name=\"$filename\"\r\n";
         $message_part .= "Content-Transfer-Encoding: base64\r\n";
         $message_part .= "Content-Disposition: attachment; filename=\"$filename\"\r\n";
         $message_part .= "\r\n";
         $message_part .= chunk_split(base64_encode($file));
-        $message_part .= "\r\n--$boundary--\r\n";
-        // второй частью прикрепляем файл, можно прикрепить два и более файла
-
+        $message_part .= "\r\n--$boundary\r\n";
         $multipart .= $message_part;
 
+        //удаляем файлы через 60 сек.
+        if (time_nanosleep(5, 0)) {
+            unlink($filepath);
+            $unlink='yes';
+        }
     }
+}
+
+
 
 // отправляем письмо
     if (mail($to, $subject, $multipart, $mailheaders)) {
-        echo '<div class="sent_ok"><h4>Сообщение успешно отправлено!</h4></div>';
+        echo '<div class="sent_ok"><h4>Сообщение успешно отправлено!</h4></div><br>';
     } else {
         http_response_code(412);
         die();
-    }
-
-
-//удаляем файлы через 60 сек.
-    if (time_nanosleep(5, 0)) {
-        unlink($filepath);
-    }
-// удаление файла
+    } 
 
 }else{
     http_response_code(408);
